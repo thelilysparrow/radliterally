@@ -1,0 +1,27 @@
+const { OpenAI } = require('openai');
+
+// Initialize OpenAI client
+const openai = new OpenAI(process.env.OPENAI_API_KEY);
+
+/**
+ * Generate project ideas based on user input.
+ * @param {string} prompt - The user's input prompt for idea generation.
+ * @returns {Promise<string>} - The generated project idea.
+ */
+async function generateIdea(prompt) {
+  try {
+    const response = await openai.complete({
+      engine: 'davinci',
+      prompt: `Generate project ideas based on the following input:\n${prompt}\n`,
+      maxTokens: 150,
+    });
+    return response.choices[0].text.trim();
+  } catch (error) {
+    console.error('Error generating idea:', error);
+    throw new Error('Failed to generate idea');
+  }
+}
+
+module.exports = {
+  generateIdea,
+};
